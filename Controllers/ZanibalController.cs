@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Refit;
 using Refit_tutorial.Model_Interface;
 
 namespace Refit_tutorial.Controllers
@@ -10,9 +11,10 @@ namespace Refit_tutorial.Controllers
     {
         private readonly ILogger<ZanibalController> _logger;
         private readonly IZanibalApi _zanibalApi;
-        public ZanibalController(IZanibalApi zanibalApi)
+        public ZanibalController(IZanibalApi zanibalApi, ILogger<ZanibalController> logger)
         {
             _zanibalApi = zanibalApi;
+            _logger = logger;
         }
 
 
@@ -24,9 +26,17 @@ namespace Refit_tutorial.Controllers
                 var result = await _zanibalApi.GetTokenAsync(request);
                 return Ok(result);
             }
+            catch (ApiException ex)
+            {
+                _logger.LogError(ex, "An error occurred while fetching the webhook list.");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Content:{ex.Content} \n {ex.ReasonPhrase}");
+
+
+
+            }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while getting the token.");
+                _logger.LogError(ex, "An error occurred while fetching the webhook list.");
                 return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
             }
         }
@@ -39,9 +49,9 @@ namespace Refit_tutorial.Controllers
             {
                 var request = new ZaniRequest
                 {
-                    username = "your username here",
-                    password = "your password here",
-                    tenant = "tenant here"
+                    username = "Uq2bKq+/sdfsadfsadsfasf==",
+                    password = "/sdfsadfsf/asdfsdfsf+GI0=",
+                    tenant = "asdfsdfdsf"
                 };
 
                 var result = await _zanibalApi.GetTokenAsync(request);
@@ -50,11 +60,20 @@ namespace Refit_tutorial.Controllers
 
                 return Ok(getResp);
             }
-            catch (Exception ex)
+            catch (ApiException ex)
             {
-               
-                return BadRequest(ex);
+                _logger.LogError(ex, "An error occurred while fetching the webhook list.");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Content:{ex.Content} \n {ex.ReasonPhrase}");
+
+
+
             }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while fetching the webhook list.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
+            }
+
         }
     }
 }

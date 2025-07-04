@@ -34,7 +34,7 @@ namespace Refit_tutorial.Model_Interface
                 .ConfigureHttpClient(c =>
                 {
                     c.BaseAddress = new Uri("https://api.dev.mywealthcare.io");
-                    c.DefaultRequestHeaders.Add("x-tenant-id", "enter tenant here");
+                    c.DefaultRequestHeaders.Add("x-tenant-id", "sdfsaf");
                 })
                 .AddPolicyHandler(retryPolicy);
 
